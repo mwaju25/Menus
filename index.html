@@ -15,6 +15,7 @@
             height: 1080px;
             overflow: hidden;
             background-color: #000000;
+            background-image: url('fond.gif'); /* Chargement de votre unique fond GIF */
             background-size: cover;
             background-position: center;
             display: flex;
@@ -37,10 +38,9 @@
             border: 18px solid #ffffff;
             border-radius: 50%;
             position: relative;
-            background: #111b29; /* Bleu foncé opaque pour un fort contraste */
+            background: #111b29; /* Bleu foncé opaque */
             box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.6);
         }
-        /* Point central de l'horloge */
         .analog-clock::after {
             content: '';
             position: absolute;
@@ -53,7 +53,6 @@
             transform: translate(-50%, -50%);
             z-index: 10;
         }
-        /* Construction des repères des heures */
         .hour-marker {
             position: absolute;
             width: 8px;
@@ -64,14 +63,12 @@
             transform-origin: bottom center;
             bottom: 50%;
         }
-        /* Aiguilles */
         .hand {
             position: absolute;
             bottom: 50%;
             left: 50%;
             transform-origin: bottom center;
             border-radius: 10px;
-            transform: rotate(0deg);
         }
         .hour-hand {
             width: 14px;
@@ -93,7 +90,6 @@
             background: #ff9f43;
             z-index: 7;
             margin-left: -2px;
-            border-radius: 0;
         }
 
         /* --- MOITIÉ DROITE : DATE ET ARDOISE --- */
@@ -104,10 +100,9 @@
             flex-direction: column;
             justify-content: space-between;
         }
-        /* Encadré de la Date */
         .date-container {
             width: 100%;
-            background: #111b29; /* Assorti au bleu de l'horloge */
+            background: #111b29;
             border-radius: 24px;
             padding: 30px;
             text-align: center;
@@ -119,10 +114,8 @@
             font-weight: 900;
             color: #00ffcc;
             text-transform: capitalize;
-            letter-spacing: 1px;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
-        /* Cadre Ardoise du Restaurant */
         .slate-container {
             width: 100%;
             height: 720px;
@@ -146,54 +139,50 @@
 </head>
 <body>
 
-    <!-- 1. CÔTÉ GAUCHE : HORLOGE ANALOGIQUE COMPLET -->
+    <!-- GAUCHE -->
     <div class="left-side">
         <div class="analog-clock" id="clock-face">
-            <!-- Les repères des heures vont être générés ici par le script -->
             <div class="hand hour-hand" id="hour"></div>
             <div class="hand minute-hand" id="minute"></div>
             <div class="hand second-hand" id="second"></div>
         </div>
     </div>
 
-    <!-- 2. CÔTÉ DROIT : DATE + ARDOISE MENU -->
+    <!-- DROITE -->
     <div class="right-side">
         <div class="date-container">
             <div class="date-text" id="date">Chargement...</div>
         </div>
-        
         <div class="slate-container">
             <img src="" id="menu-image" class="menu-photo" alt="Chargement du menu...">
         </div>
     </div>
 
     <script>
-        // Génération automatique des 12 repères des heures autour du cadran
+        // Génération des 12 repères des heures
         const clockFace = document.getElementById('clock-face');
         for (let i = 1; i <= 12; i++) {
             const marker = document.createElement('div');
             marker.className = 'hour-marker';
-            // Calcul de la hauteur pour décoller le repère du centre et le coller au bord
             marker.style.transform = `rotate(${i * 30}deg) translateY(-245px)`;
             clockFace.appendChild(marker);
         }
 
-        // CONFIGURATION DES IMAGES PAR JOUR DE LA SEMAINE
-        const configSemaine = {
-            1: { gif: "lundi.gif", photo: "menu-lundi.jpg" },
-            2: { gif: "mardi.gif", photo: "menu-mardi.jpg" },
-            3: { gif: "mercredi.gif", photo: "menu-mercredi.jpg" },
-            4: { gif: "jeudi.gif", photo: "menu-jeudi.jpg" },
-            5: { gif: "vendredi.gif", photo: "menu-vendredi.jpg" }
+        // CONFIGURATION DES PHOTOS DE MENUS UNIQUEMENT
+        const photosSemaine = {
+            1: "menu-lundi.jpg",
+            2: "menu-mardi.jpg",
+            3: "menu-mercredi.jpg",
+            4: "menu-jeudi.jpg",
+            5: "menu-vendredi.jpg"
         };
-
-        const configWeekend = { gif: "weekend.gif", photo: "menu-ferme.jpg" };
+        const photoWeekend = "menu-ferme.jpg";
 
         function updateScreen() {
             const now = new Date();
             const dayOfWeek = now.getDay();
             
-            // --- 1. ROTATION DES AIGUILLES ---
+            // 1. Horloge analogique
             const seconds = now.getSeconds();
             const minutes = now.getMinutes();
             const hours = now.getHours();
@@ -206,14 +195,13 @@
             document.getElementById('minute').style.transform = `rotate(${minuteDegrees}deg)`;
             document.getElementById('hour').style.transform = `rotate(${hourDegrees}deg)`;
 
-            // --- 2. DATE COMPLÈTE ---
+            // 2. Date complète
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('fr-FR', options);
             
-            // --- 3. CHARGEMENT DES MEDIAS ---
-            const dataJourdhui = configSemaine[dayOfWeek] || configWeekend;
-            document.body.style.backgroundImage = `url('${dataJourdhui.gif}')`;
-            document.getElementById('menu-image').src = dataJourdhui.photo;
+            // 3. Changement automatique de la photo du menu
+            const photoAujourdhui = photosSemaine[dayOfWeek] || photoWeekend;
+            document.getElementById('menu-image').src = photoAujourdhui;
         }
 
         updateScreen();
