@@ -13,7 +13,6 @@
             display: flex; padding: 4vh 6vw; justify-content: space-between; align-items: flex-end; 
         }
         
-        /* Hauteur maximale harmonisée à 580px pour les deux côtés */
         .left-side, .right-side { width: 44%; height: 580px; display: flex; }
         .left-side { justify-content: center; align-items: center; }
         .right-side { flex-direction: column; justify-content: space-between; }
@@ -42,17 +41,17 @@
         .minute-hand { width: 10px; height: 220px; background: #1a1a1a; z-index: 6; margin-left: -5px; }
         .second-hand { width: 3px; height: 250px; background: #e74c3c; z-index: 7; margin-left: -1.5px; border-radius: 0; }
 
-        /* --- BLOC DATE DU HAUT AVEC CADRE JAUNE/DORÉ --- */
+        /* --- BLOC DATE AVEC CONTOUR JAUNE/DORÉ --- */
         .date-container {
             width: 100%; background: rgba(17, 17, 17, 0.95); border-radius: 20px;
             padding: 20px; text-align: center; border: 3px solid #d4af37; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         .date-text { font-size: 34px; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* --- ARDOISE TRADITIONNELLE AVEC CADRE EN BOIS --- */
+        /* --- ARDOISE AVEC CONTOUR EN BOIS --- */
         .slate-container {
             width: 100%; height: 465px; background: #22252a; 
-            border: 18px solid #4a3329; border-radius: 10px; /* Retour du cadre bois */
+            border: 18px solid #4a3329; border-radius: 10px; 
             outline: 2px solid #2e1f18;
             box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.8);
             padding: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden;
@@ -62,7 +61,7 @@
 </head>
 <body>
 
-    <!-- GAUCHE : HORLOGE XXL TRÈS LISIBLE -->
+    <!-- GAUCHE : HORLOGE GÉANTE LISIBLE -->
     <div class="left-side">
         <div class="analog-clock">
             <div class="clock-face-lines" id="clock-face">
@@ -73,7 +72,7 @@
         </div>
     </div>
 
-    <!-- DROITE : CADRE DORÉ ET ARDOISE BOIS -->
+    <!-- DROITE : BLOCS JAUNE ET BOIS ALIGNÉS -->
     <div class="right-side">
         <div class="date-container"><div class="date-text" id="date">Chargement...</div></div>
         <div class="slate-container"><img src="" id="menu-image" class="menu-photo" alt="Menu"></div>
@@ -99,6 +98,7 @@
             }
         }
 
+        // Configuration pour 1 seule semaine (Sera lue chaque jour)
         const photosSemaine = { 1: "menu-lundi.jpg", 2: "menu-mardi.jpg", 3: "menu-mercredi.jpg", 4: "menu-jeudi.jpg", 5: "menu-vendredi.jpg" };
 
         function update() {
