@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affichage Dynamique École</title>
-    <!-- Importation d'une police ultra-lisible à distance -->
     <link href="https://googleapis.com" rel="stylesheet">
     
     <style>
@@ -18,98 +17,151 @@
             background-color: #000000;
             background-size: cover;
             background-position: center;
-            transition: background-image 0.5s ease-in-out;
+            display: flex;
+            padding: 60px;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Cadre de l'Horloge et de la Date (En haut à droite) */
-        .clock-container {
-            position: absolute;
-            top: 60px;
-            right: 60px;
+        /* --- MOITIÉ GAUCHE : HORLOGE ANALOGIQUE --- */
+        .left-side {
+            width: 850px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .analog-clock {
             width: 550px;
-            text-align: right;
+            height: 550px;
+            border: 15px solid #ffffff;
+            border-radius: 50%;
+            position: relative;
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.5);
+        }
+        /* Point central de l'horloge */
+        .analog-clock::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ff9f43;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 10;
         }
-        .time {
-            font-size: 120px;
-            font-weight: 900;
-            color: #ffffff;
-            line-height: 1;
-            letter-spacing: -2px;
-            text-shadow: 3px 3px 15px rgba(0,0,0,0.8);
+        /* Aiguilles */
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 10px;
+            transform: rotate(0deg);
         }
-        .date {
-            font-size: 34px;
-            font-weight: 700;
-            color: #00ffcc; /* Couleur turquoise pour faire ressortir la date */
-            text-transform: capitalize;
-            margin-top: 12px;
-            text-shadow: 3px 3px 15px rgba(0,0,0,0.8);
+        .hour-hand {
+            width: 12px;
+            height: 140px;
+            background: #ffffff;
+            z-index: 5;
+            margin-left: -6px;
+        }
+        .minute-hand {
+            width: 8px;
+            height: 210px;
+            background: #e0e0e0;
+            z-index: 6;
+            margin-left: -4px;
+        }
+        .second-hand {
+            width: 4px;
+            height: 230px;
+            background: #ff9f43;
+            z-index: 7;
+            margin-left: -2px;
+            border-radius: 0;
         }
 
-        /* Cadre d'affichage de la Photo du Menu (En bas à droite) */
-        .menu-container {
-            position: absolute;
-            bottom: 60px;
-            right: 60px;
-            width: 550px;
-            height: 680px; /* Zone optimisée pour accueillir l'affiche du menu */
-            background: rgba(20, 20, 30, 0.85); /* Fond sombre semi-transparent */
-            backdrop-filter: blur(12px); /* Effet de flou moderne sur le GIF de fond */
-            border-radius: 28px;
-            padding: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+        /* --- MOITIÉ DROITE : DATE ET ARDOISE --- */
+        .right-side {
+            width: 850px;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
-        .menu-title {
-            font-size: 26px;
-            font-weight: 900;
-            color: #ff9f43; /* Couleur orange chaleureuse pour le restaurant */
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px;
-            text-align: center;
-        }
-        .menu-photo-wrapper {
-            flex-grow: 1;
+        /* Encadré de la Date */
+        .date-container {
             width: 100%;
-            height: calc(100% - 60px);
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .date-text {
+            font-size: 42px;
+            font-weight: 900;
+            color: #00ffcc;
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+        /* Cadre Ardoise du Restaurant */
+        .slate-container {
+            width: 100%;
+            height: 720px;
+            background: #1e1e1e; /* Couleur simulant le fond de l'ardoise */
+            border: 22px solid #5c4033; /* Cadre en bois de l'ardoise */
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,1);
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            border-radius: 16px;
-            background: #0d0d12;
+            position: relative;
         }
         .menu-photo {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Ajuste la photo du menu sans jamais la déformer */
+            object-fit: contain; /* Ajuste parfaitement votre photo JPEG dans l'ardoise sans la déformer */
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Blocs automatiques gérés par le script -->
-    <div class="clock-container">
-        <div class="time" id="clock">00:00</div>
-        <div class="date" id="date">Chargement...</div>
+    <!-- 1. CÔTÉ GAUCHE : HORLOGE ANALOGIQUE -->
+    <div class="left-side">
+        <div class="analog-clock">
+            <div class="hand hour-hand" id="hour"></div>
+            <div class="hand minute-hand" id="minute"></div>
+            <div class="hand second-hand" id="second"></div>
+        </div>
     </div>
 
-    <div class="menu-container">
-        <div class="menu-title">🍴 Au Menu Aujourd'hui</div>
-        <div class="menu-photo-wrapper">
+    <!-- 2. CÔTÉ DROIT : DATE + ARDOISE MENU -->
+    <div class="right-side">
+        <!-- Encadré Date du jour -->
+        <div class="date-container">
+            <div class="date-text" id="date">Chargement...</div>
+        </div>
+        
+        <!-- Cadre Ardoise restaurant -->
+        <div class="slate-container">
             <img src="" id="menu-image" class="menu-photo" alt="Chargement du menu...">
         </div>
     </div>
 
     <script>
-        // ASSIGNATION AUTOMATIQUE DES IMAGES SELON LE JOUR
-        // Veillez à nommer vos fichiers exactement comme ci-dessous sur GitHub
+        // CONFIGURATION DES IMAGES PAR JOUR DE LA SEMAINE
         const configSemaine = {
             1: { gif: "lundi.gif", photo: "menu-lundi.jpg" },
             2: { gif: "mardi.gif", photo: "menu-mardi.jpg" },
@@ -118,41 +170,43 @@
             5: { gif: "vendredi.gif", photo: "menu-vendredi.jpg" }
         };
 
-        // Configuration de secours pour le week-end
-        const configWeekend = { 
-            gif: "weekend.gif", 
-            photo: "menu-ferme.jpg" 
-        };
+        const configWeekend = { gif: "weekend.gif", photo: "menu-ferme.jpg" };
 
         function updateScreen() {
             const now = new Date();
-            const dayOfWeek = now.getDay(); // 1 = Lundi, 2 = Mardi...
+            const dayOfWeek = now.getDay();
             
-            // 1. Horloge automatique (Heures:Minutes)
-            let hours = String(now.getHours()).padStart(2, '0');
-            let minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}`;
-            
-            // 2. Date automatique au format textuel français
-            const options = { weekday: 'long', day: 'numeric', month: 'long' };
+            // --- 1. GESTION DE L'HORLOGE ANALOGIQUE ---
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            // Calcul des angles de rotation des aiguilles
+            const secondDegrees = (seconds / 60) * 360;
+            const minuteDegrees = (minutes / 60) * 360 + (seconds / 60) * 6;
+            const hourDegrees = (hours / 12) * 360 + (minutes / 60) * 30;
+
+            document.getElementById('second').style.transform = `rotate(${secondDegrees}deg)`;
+            document.getElementById('minute').style.transform = `rotate(${minuteDegrees}deg)`;
+            document.getElementById('hour').style.transform = `rotate(${hourDegrees}deg)`;
+
+            // --- 2. GESTION DE LA DATE COMPLÈTE (Jour, date, mois, année) ---
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('fr-FR', options);
             
-            // 3. Sélection des éléments du jour courant
+            // --- 3. MISE À JOUR DES ARRIÈRE-PLANS ET IMAGES ---
             const dataJourdhui = configSemaine[dayOfWeek] || configWeekend;
             
-            // Application du fond d'écran GIF correspondant
+            // Applique le GIF de fond d'écran
             document.body.style.backgroundImage = `url('${dataJourdhui.gif}')`;
             
-            // Insertion de la photo du menu dans le cadre
+            // Insère la photo JPEG du menu dans l'ardoise
             document.getElementById('menu-image').src = dataJourdhui.photo;
         }
 
-        // Lancement immédiat au chargement de l'écran
+        // Lancement immédiat et mise à jour fluide à la seconde
         updateScreen();
-        
-        // Rafraîchissement automatique de l'heure toutes les secondes
         setInterval(updateScreen, 1000);
     </script>
 </body>
 </html>
-
