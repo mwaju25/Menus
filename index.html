@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affichage Dynamique École</title>
+    <!-- Importation de polices élégantes : Inter pour l'horloge, Playfair pour le côté restaurant -->
     <link href="https://googleapis.com" rel="stylesheet">
     
     <style>
@@ -15,39 +16,42 @@
             height: 100vh;
             overflow: hidden;
             background-color: #000000;
-            /* Ligne modifiée pour charger votre fichier menu.gif */
             background-image: url('menu.gif'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             display: flex;
-            padding: 4vh 4vw;
+            padding: 4vh 5vw;
             justify-content: space-between;
-            align-items: flex-end; /* Laisse le haut de l'écran libre pour le titre de votre GIF */
+            align-items: flex-end; 
         }
 
-        /* --- MOITIÉ GAUCHE : HORLOGE ANALOGIQUE COMPACTE --- */
+        /* --- MOITIÉ GAUCHE : HORLOGE DESIGN --- */
         .left-side {
             width: 45%;
-            height: 70vh;
+            height: 65vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .analog-clock {
-            width: 320px; 
-            height: 320px;
-            border: 10px solid #ffffff;
+            width: 340px; 
+            height: 340px;
+            border: 4px solid rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             position: relative;
-            background: #111b29;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.6);
+            /* Effet Frosted Glass (verre dépoli) pour laisser deviner le fond bleu sans bloquer le regard */
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.1);
         }
+        /* Cœur de l'horloge */
         .analog-clock::after {
             content: '';
             position: absolute;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             background: #ff9f43;
             border-radius: 50%;
             top: 50%;
@@ -55,76 +59,89 @@
             transform: translate(-50%, -50%);
             z-index: 10;
         }
+        /* Index des heures épurés */
         .hour-marker {
             position: absolute;
-            width: 4px;
-            height: 12px;
-            background: #ffffff;
+            width: 3px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.6);
             left: 50%;
-            margin-left: -2px;
+            margin-left: -1.5px;
             transform-origin: bottom center;
             bottom: 50%;
         }
+        /* Style des aiguilles profilées */
         .hand {
             position: absolute;
             bottom: 50%;
             left: 50%;
             transform-origin: bottom center;
-            border-radius: 6px;
         }
         .hour-hand {
             width: 8px;
-            height: 80px;
+            height: 85px;
             background: #ffffff;
+            border-radius: 4px;
             z-index: 5;
             margin-left: -4px;
         }
         .minute-hand {
-            width: 5px;
-            height: 115px;
-            background: #ffffff;
+            width: 4px;
+            height: 125px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 4px;
             z-index: 6;
-            margin-left: -2.5px;
+            margin-left: -2px;
         }
         .second-hand {
             width: 2px;
-            height: 130px;
+            height: 140px;
             background: #ff9f43;
             z-index: 7;
             margin-left: -1px;
         }
 
-        /* --- MOITIÉ DROITE : DATE ET ARDOISE PROPORTIONNELLES --- */
+        /* --- MOITIÉ DROITE : DATE ET ARDOISE RESTAURANT --- */
         .right-side {
             width: 45%;
-            height: 70vh; 
+            height: 68vh; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
+        /* Encadré Date Stylisé */
         .date-container {
             width: 100%;
-            background: #111b29;
-            border-radius: 16px;
-            padding: 15px;
+            background: rgba(14, 23, 37, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 12px 25px;
             text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .date-text {
-            font-size: 24px; 
-            font-weight: 700;
-            color: #00ffcc;
-            text-transform: capitalize;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px; 
+            font-style: italic;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 0.5px;
         }
+        /* Véritable Ardoise de Restaurant */
         .slate-container {
             width: 100%;
-            height: 80%; 
-            background: #1e1e1e; 
-            border: 15px solid #5c4033; 
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,1);
-            padding: 10px;
+            height: 82%; 
+            /* Texture ardoise naturelle noire/grise */
+            background-color: #22252a;
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 4px 4px;
+            /* Cadre mouluré effet bois de chêne */
+            border: 16px solid #4a3329; 
+            border-radius: 8px;
+            outline: 2px solid #2e1f18;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -134,12 +151,13 @@
             width: 100%;
             height: 100%;
             object-fit: contain; 
+            filter: drop-shadow(0px 5px 15px rgba(0,0,0,0.5));
         }
     </style>
 </head>
 <body>
 
-    <!-- GAUCHE : HORLOGE -->
+    <!-- GAUCHE : HORLOGE GLASSMORPHISM -->
     <div class="left-side">
         <div class="analog-clock" id="clock-face">
             <div class="hand hour-hand" id="hour"></div>
@@ -148,7 +166,7 @@
         </div>
     </div>
 
-    <!-- DROITE : DATE + ARDOISE -->
+    <!-- DROITE : DATE RESTO + ARDOISE CHÊNE -->
     <div class="right-side">
         <div class="date-container">
             <div class="date-text" id="date">Chargement...</div>
@@ -159,12 +177,12 @@
     </div>
 
     <script>
-        // Génération des 12 repères
+        // Génération des index de l'horloge
         const clockFace = document.getElementById('clock-face');
         for (let i = 1; i <= 12; i++) {
             const marker = document.createElement('div');
             marker.className = 'hour-marker';
-            marker.style.transform = `rotate(${i * 30}deg) translateY(-138px)`;
+            marker.style.transform = `rotate(${i * 30}deg) translateY(-152px)`;
             clockFace.appendChild(marker);
         }
 
@@ -181,7 +199,7 @@
             const now = new Date();
             const dayOfWeek = now.getDay();
             
-            // 1. Aiguilles Horloge
+            // 1. Logique des aiguilles
             const seconds = now.getSeconds();
             const minutes = now.getMinutes();
             const hours = now.getHours();
@@ -194,11 +212,11 @@
             document.getElementById('minute').style.transform = `rotate(${minuteDegrees}deg)`;
             document.getElementById('hour').style.transform = `rotate(${hourDegrees}deg)`;
 
-            // 2. Date
+            // 2. Format de la date élégante
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('fr-FR', options);
             
-            // 3. Photo du menu
+            // 3. Liaison image menu
             const photoAujourdhui = photosSemaine[dayOfWeek] || photoWeekend;
             document.getElementById('menu-image').src = photoAujourdhui;
         }
