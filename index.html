@@ -1,26 +1,38 @@
     <script>
         const clockFace = document.getElementById('clock-face');
-        const radius = 205; // Ajustement du rayon pour coller parfaitement les chiffres aux tirets
+        const radius = 205; 
         
+        // 1. Placement des chiffres 1 à 12
         for (let i = 1; i <= 12; i++) {
             const num = document.createElement('div');
             num.className = 'clock-number'; num.textContent = i;
             const angle = (i * 30 - 90) * (Math.PI / 180);
-            
-            // Correction du calcul de centrage pour chaque chiffre (290 correspond à la moitié de 580px)
             const x = 290 + radius * Math.cos(angle) - 35; 
             const y = 290 + radius * Math.sin(angle) - 35;
-            
             num.style.left = `${x}px`;
             num.style.top = `${y}px`;
             clockFace.appendChild(num);
         }
         
+        // 2. Génération de TOUTES les 60 graduations (Heures et Minutes)
         for (let i = 1; i <= 60; i++) {
-            if (i % 5 !== 0) {
-                const m = document.createElement('div'); m.className = 'hour-marker';
-                m.style.transform = `rotate(${i * 6}deg) translateY(-258px)`; clockFace.appendChild(m);
+            const m = document.createElement('div'); 
+            m.className = 'hour-marker';
+            
+            // Si c'est un multiple de 5 (les heures), on fait un trait plus long et plus épais
+            if (i % 5 === 0) {
+                m.style.width = '6px';
+                m.style.height = '22px';
+                m.style.background = '#1a1a1a';
+                m.style.transform = `rotate(${i * 6}deg) translateY(-254px)`;
+            } else {
+                // Les minutes classiques, traits plus fins
+                m.style.width = '3px';
+                m.style.height = '12px';
+                m.style.background = '#666666';
+                m.style.transform = `rotate(${i * 6}deg) translateY(-258px)`;
             }
+            clockFace.appendChild(m);
         }
 
         const photosSemaine = { 1: "menu-lundi.jpg", 2: "menu-mardi.jpg", 3: "menu-mercredi.jpg", 4: "menu-jeudi.jpg", 5: "menu-vendredi.jpg" };
