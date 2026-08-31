@@ -15,37 +15,37 @@
             height: 1080px;
             overflow: hidden;
             background-color: #000000;
-            background-image: url('fond.gif'); /* Chargement de votre unique fond GIF */
+            background-image: url('fond.gif'); /* Doit s'appeler fond.gif sur GitHub */
             background-size: cover;
             background-position: center;
             display: flex;
-            padding: 60px;
+            padding: 50px 80px;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end; /* Aligne les éléments vers le bas pour laisser de la place au titre du GIF */
         }
 
-        /* --- MOITIÉ GAUCHE : HORLOGE ANALOGIQUE --- */
+        /* --- MOITIÉ GAUCHE : HORLOGE ANALOGIQUE (PLUS PETITE) --- */
         .left-side {
-            width: 850px;
-            height: 100%;
+            width: 750px;
+            height: 700px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .analog-clock {
-            width: 580px;
-            height: 580px;
-            border: 18px solid #ffffff;
+            width: 420px; /* Réduit de 580px à 420px */
+            height: 420px;
+            border: 12px solid #ffffff;
             border-radius: 50%;
             position: relative;
-            background: #111b29; /* Bleu foncé opaque */
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.6);
+            background: #111b29;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.6);
         }
         .analog-clock::after {
             content: '';
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             background: #ff9f43;
             border-radius: 50%;
             top: 50%;
@@ -55,11 +55,11 @@
         }
         .hour-marker {
             position: absolute;
-            width: 8px;
-            height: 25px;
+            width: 6px;
+            height: 18px;
             background: #ffffff;
             left: 50%;
-            margin-left: -4px;
+            margin-left: -3px;
             transform-origin: bottom center;
             bottom: 50%;
         }
@@ -68,34 +68,34 @@
             bottom: 50%;
             left: 50%;
             transform-origin: bottom center;
-            border-radius: 10px;
+            border-radius: 8px;
         }
         .hour-hand {
-            width: 14px;
-            height: 150px;
+            width: 10px;
+            height: 110px;
             background: #ffffff;
             z-index: 5;
-            margin-left: -7px;
+            margin-left: -5px;
         }
         .minute-hand {
-            width: 9px;
-            height: 220px;
+            width: 7px;
+            height: 160px;
             background: #ffffff;
             z-index: 6;
-            margin-left: -4.5px;
+            margin-left: -3.5px;
         }
         .second-hand {
-            width: 4px;
-            height: 245px;
+            width: 3px;
+            height: 180px;
             background: #ff9f43;
             z-index: 7;
-            margin-left: -2px;
+            margin-left: -1.5px;
         }
 
-        /* --- MOITIÉ DROITE : DATE ET ARDOISE --- */
+        /* --- MOITIÉ DROITE : DATE ET ARDOISE (PROPORTIONNÉES) --- */
         .right-side {
-            width: 850px;
-            height: 100%;
+            width: 750px;
+            height: 750px; /* Réduit pour éviter d'envahir le haut de l'écran */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -103,27 +103,26 @@
         .date-container {
             width: 100%;
             background: #111b29;
-            border-radius: 24px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
             border: 2px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
         }
         .date-text {
-            font-size: 42px;
+            font-size: 34px; /* Un peu plus petit et discret */
             font-weight: 900;
             color: #00ffcc;
             text-transform: capitalize;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
         .slate-container {
             width: 100%;
-            height: 720px;
+            height: 580px; /* Ajusté pour laisser de la place */
             background: #1e1e1e; 
-            border: 22px solid #5c4033; /* Cadre en bois */
-            border-radius: 16px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,1);
-            padding: 15px;
+            border: 18px solid #5c4033; /* Cadre bois légèrement plus fin */
+            border-radius: 14px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,1);
+            padding: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -159,16 +158,15 @@
     </div>
 
     <script>
-        // Génération des 12 repères des heures
+        // Génération dynamique des 12 repères (adaptée à la nouvelle taille de 420px)
         const clockFace = document.getElementById('clock-face');
         for (let i = 1; i <= 12; i++) {
             const marker = document.createElement('div');
             marker.className = 'hour-marker';
-            marker.style.transform = `rotate(${i * 30}deg) translateY(-245px)`;
+            marker.style.transform = `rotate(${i * 30}deg) translateY(-172px)`;
             clockFace.appendChild(marker);
         }
 
-        // CONFIGURATION DES PHOTOS DE MENUS UNIQUEMENT
         const photosSemaine = {
             1: "menu-lundi.jpg",
             2: "menu-mardi.jpg",
@@ -199,7 +197,7 @@
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('fr-FR', options);
             
-            // 3. Changement automatique de la photo du menu
+            // 3. Photo du menu
             const photoAujourdhui = photosSemaine[dayOfWeek] || photoWeekend;
             document.getElementById('menu-image').src = photoAujourdhui;
         }
