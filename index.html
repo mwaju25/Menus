@@ -18,9 +18,9 @@
         .left-side { justify-content: center; align-items: center; }
         .right-side { flex-direction: column; justify-content: space-between; }
 
-        /* --- HORLOGE GÉANTE PREMIUM (580px) --- */
+        /* --- HORLOGE GÉANTE CLASSIQUE BLANCHE (580px) --- */
         .analog-clock {
-            width: 580px; height: 580px; border: 16px solid #1a1a1a; border-radius: 50%;
+            width: 580px; height: 580px; border: 12px solid #1a1a1a; border-radius: 50%;
             position: relative; background: #ffffff; overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.15);
         }
@@ -42,27 +42,27 @@
         .minute-hand { width: 10px; height: 220px; background: #1a1a1a; z-index: 6; margin-left: -5px; }
         .second-hand { width: 3px; height: 250px; background: #e74c3c; z-index: 7; margin-left: -1.5px; border-radius: 0; }
 
-        /* --- BLOC DATE --- */
+        /* --- BLOC DATE DU HAUT AVEC CADRE JAUNE/DORÉ --- */
         .date-container {
-            width: 100%; background: #1a1a1a; border-radius: 16px;
-            padding: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            width: 100%; background: rgba(17, 17, 17, 0.95); border-radius: 20px;
+            padding: 20px; text-align: center; border: 3px solid #d4af37; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         .date-text { font-size: 34px; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* --- GRANDE ARDOISE AGRANDIE (Ajustée à 465px pour l'alignement) --- */
+        /* --- ARDOISE TRADITIONNELLE AVEC CADRE EN BOIS --- */
         .slate-container {
             width: 100%; height: 465px; background: #22252a; 
-            border: 14px solid #1a1a1a; border-radius: 16px; 
+            border: 18px solid #4a3329; border-radius: 10px; /* Retour du cadre bois */
+            outline: 2px solid #2e1f18;
             box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.8);
-            padding: 12px; display: flex; justify-content: center; align-items: center; overflow: hidden;
+            padding: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
         .menu-photo { width: 100%; height: 100%; object-fit: contain; }
     </style>
 </head>
 <body>
 
-    <!-- GAUCHE : HORLOGE GÉANTE VISIBLE -->
+    <!-- GAUCHE : HORLOGE XXL TRÈS LISIBLE -->
     <div class="left-side">
         <div class="analog-clock">
             <div class="clock-face-lines" id="clock-face">
@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <!-- DROITE : BLOCS ALIGNÉS ÉQUILIBRÉS -->
+    <!-- DROITE : CADRE DORÉ ET ARDOISE BOIS -->
     <div class="right-side">
         <div class="date-container"><div class="date-text" id="date">Chargement...</div></div>
         <div class="slate-container"><img src="" id="menu-image" class="menu-photo" alt="Menu"></div>
@@ -81,13 +81,13 @@
 
     <script>
         const clockFace = document.getElementById('clock-face');
-        const radius = 220; // Rayon augmenté pour la taille de 580px
+        const radius = 220; 
         
         for (let i = 1; i <= 12; i++) {
             const num = document.createElement('div');
             num.className = 'clock-number'; num.textContent = i;
             const angle = (i * 30 - 90) * (Math.PI / 180);
-            num.style.left = `${274 + radius * Math.cos(angle) - 35}px`; // 274 est le nouveau centre exact du cadran
+            num.style.left = `${274 + radius * Math.cos(angle) - 35}px`; 
             num.style.top = `${274 + radius * Math.sin(angle) - 35}px`;
             clockFace.appendChild(num);
         }
