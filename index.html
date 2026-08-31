@@ -32,14 +32,13 @@
             align-items: center;
         }
         .analog-clock {
-            width: 550px;
-            height: 550px;
-            border: 15px solid #ffffff;
+            width: 580px;
+            height: 580px;
+            border: 18px solid #ffffff;
             border-radius: 50%;
             position: relative;
-            background: rgba(20, 20, 30, 0.6);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.5);
+            background: #111b29; /* Bleu foncé opaque pour un fort contraste */
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.6);
         }
         /* Point central de l'horloge */
         .analog-clock::after {
@@ -54,6 +53,17 @@
             transform: translate(-50%, -50%);
             z-index: 10;
         }
+        /* Construction des repères des heures */
+        .hour-marker {
+            position: absolute;
+            width: 8px;
+            height: 25px;
+            background: #ffffff;
+            left: 50%;
+            margin-left: -4px;
+            transform-origin: bottom center;
+            bottom: 50%;
+        }
         /* Aiguilles */
         .hand {
             position: absolute;
@@ -64,22 +74,22 @@
             transform: rotate(0deg);
         }
         .hour-hand {
-            width: 12px;
-            height: 140px;
+            width: 14px;
+            height: 150px;
             background: #ffffff;
             z-index: 5;
-            margin-left: -6px;
+            margin-left: -7px;
         }
         .minute-hand {
-            width: 8px;
-            height: 210px;
-            background: #e0e0e0;
+            width: 9px;
+            height: 220px;
+            background: #ffffff;
             z-index: 6;
-            margin-left: -4px;
+            margin-left: -4.5px;
         }
         .second-hand {
             width: 4px;
-            height: 230px;
+            height: 245px;
             background: #ff9f43;
             z-index: 7;
             margin-left: -2px;
@@ -97,12 +107,11 @@
         /* Encadré de la Date */
         .date-container {
             width: 100%;
-            background: rgba(20, 20, 30, 0.8);
-            backdrop-filter: blur(12px);
+            background: #111b29; /* Assorti au bleu de l'horloge */
             border-radius: 24px;
             padding: 30px;
             text-align: center;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
         .date-text {
@@ -117,8 +126,8 @@
         .slate-container {
             width: 100%;
             height: 720px;
-            background: #1e1e1e; /* Couleur simulant le fond de l'ardoise */
-            border: 22px solid #5c4033; /* Cadre en bois de l'ardoise */
+            background: #1e1e1e; 
+            border: 22px solid #5c4033; /* Cadre en bois */
             border-radius: 16px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,1);
             padding: 15px;
@@ -126,21 +135,21 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            position: relative;
         }
         .menu-photo {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Ajuste parfaitement votre photo JPEG dans l'ardoise sans la déformer */
+            object-fit: contain; 
             border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. CÔTÉ GAUCHE : HORLOGE ANALOGIQUE -->
+    <!-- 1. CÔTÉ GAUCHE : HORLOGE ANALOGIQUE COMPLET -->
     <div class="left-side">
-        <div class="analog-clock">
+        <div class="analog-clock" id="clock-face">
+            <!-- Les repères des heures vont être générés ici par le script -->
             <div class="hand hour-hand" id="hour"></div>
             <div class="hand minute-hand" id="minute"></div>
             <div class="hand second-hand" id="second"></div>
@@ -149,18 +158,26 @@
 
     <!-- 2. CÔTÉ DROIT : DATE + ARDOISE MENU -->
     <div class="right-side">
-        <!-- Encadré Date du jour -->
         <div class="date-container">
             <div class="date-text" id="date">Chargement...</div>
         </div>
         
-        <!-- Cadre Ardoise restaurant -->
         <div class="slate-container">
             <img src="" id="menu-image" class="menu-photo" alt="Chargement du menu...">
         </div>
     </div>
 
     <script>
+        // Génération automatique des 12 repères des heures autour du cadran
+        const clockFace = document.getElementById('clock-face');
+        for (let i = 1; i <= 12; i++) {
+            const marker = document.createElement('div');
+            marker.className = 'hour-marker';
+            // Calcul de la hauteur pour décoller le repère du centre et le coller au bord
+            marker.style.transform = `rotate(${i * 30}deg) translateY(-245px)`;
+            clockFace.appendChild(marker);
+        }
+
         // CONFIGURATION DES IMAGES PAR JOUR DE LA SEMAINE
         const configSemaine = {
             1: { gif: "lundi.gif", photo: "menu-lundi.jpg" },
@@ -176,12 +193,11 @@
             const now = new Date();
             const dayOfWeek = now.getDay();
             
-            // --- 1. GESTION DE L'HORLOGE ANALOGIQUE ---
+            // --- 1. ROTATION DES AIGUILLES ---
             const seconds = now.getSeconds();
             const minutes = now.getMinutes();
             const hours = now.getHours();
 
-            // Calcul des angles de rotation des aiguilles
             const secondDegrees = (seconds / 60) * 360;
             const minuteDegrees = (minutes / 60) * 360 + (seconds / 60) * 6;
             const hourDegrees = (hours / 12) * 360 + (minutes / 60) * 30;
@@ -190,21 +206,16 @@
             document.getElementById('minute').style.transform = `rotate(${minuteDegrees}deg)`;
             document.getElementById('hour').style.transform = `rotate(${hourDegrees}deg)`;
 
-            // --- 2. GESTION DE LA DATE COMPLÈTE (Jour, date, mois, année) ---
+            // --- 2. DATE COMPLÈTE ---
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('fr-FR', options);
             
-            // --- 3. MISE À JOUR DES ARRIÈRE-PLANS ET IMAGES ---
+            // --- 3. CHARGEMENT DES MEDIAS ---
             const dataJourdhui = configSemaine[dayOfWeek] || configWeekend;
-            
-            // Applique le GIF de fond d'écran
             document.body.style.backgroundImage = `url('${dataJourdhui.gif}')`;
-            
-            // Insère la photo JPEG du menu dans l'ardoise
             document.getElementById('menu-image').src = dataJourdhui.photo;
         }
 
-        // Lancement immédiat et mise à jour fluide à la seconde
         updateScreen();
         setInterval(updateScreen, 1000);
     </script>
