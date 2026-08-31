@@ -11,41 +11,43 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            width: 1920px;
-            height: 1080px;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
             background-color: #000000;
-            background-image: url('fond.gif'); /* Doit s'appeler fond.gif sur GitHub */
+            /* Ligne modifiée pour charger votre fichier menu.gif */
+            background-image: url('menu.gif'); 
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             display: flex;
-            padding: 50px 80px;
+            padding: 4vh 4vw;
             justify-content: space-between;
-            align-items: flex-end; /* Aligne les éléments vers le bas pour laisser de la place au titre du GIF */
+            align-items: flex-end; /* Laisse le haut de l'écran libre pour le titre de votre GIF */
         }
 
-        /* --- MOITIÉ GAUCHE : HORLOGE ANALOGIQUE (PLUS PETITE) --- */
+        /* --- MOITIÉ GAUCHE : HORLOGE ANALOGIQUE COMPACTE --- */
         .left-side {
-            width: 750px;
-            height: 700px;
+            width: 45%;
+            height: 70vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .analog-clock {
-            width: 420px; /* Réduit de 580px à 420px */
-            height: 420px;
-            border: 12px solid #ffffff;
+            width: 320px; 
+            height: 320px;
+            border: 10px solid #ffffff;
             border-radius: 50%;
             position: relative;
             background: #111b29;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.6);
         }
         .analog-clock::after {
             content: '';
             position: absolute;
-            width: 18px;
-            height: 18px;
+            width: 14px;
+            height: 14px;
             background: #ff9f43;
             border-radius: 50%;
             top: 50%;
@@ -55,11 +57,11 @@
         }
         .hour-marker {
             position: absolute;
-            width: 6px;
-            height: 18px;
+            width: 4px;
+            height: 12px;
             background: #ffffff;
             left: 50%;
-            margin-left: -3px;
+            margin-left: -2px;
             transform-origin: bottom center;
             bottom: 50%;
         }
@@ -68,34 +70,34 @@
             bottom: 50%;
             left: 50%;
             transform-origin: bottom center;
-            border-radius: 8px;
+            border-radius: 6px;
         }
         .hour-hand {
-            width: 10px;
-            height: 110px;
+            width: 8px;
+            height: 80px;
             background: #ffffff;
             z-index: 5;
-            margin-left: -5px;
+            margin-left: -4px;
         }
         .minute-hand {
-            width: 7px;
-            height: 160px;
+            width: 5px;
+            height: 115px;
             background: #ffffff;
             z-index: 6;
-            margin-left: -3.5px;
+            margin-left: -2.5px;
         }
         .second-hand {
-            width: 3px;
-            height: 180px;
+            width: 2px;
+            height: 130px;
             background: #ff9f43;
             z-index: 7;
-            margin-left: -1.5px;
+            margin-left: -1px;
         }
 
-        /* --- MOITIÉ DROITE : DATE ET ARDOISE (PROPORTIONNÉES) --- */
+        /* --- MOITIÉ DROITE : DATE ET ARDOISE PROPORTIONNELLES --- */
         .right-side {
-            width: 750px;
-            height: 750px; /* Réduit pour éviter d'envahir le haut de l'écran */
+            width: 45%;
+            height: 70vh; 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -103,25 +105,25 @@
         .date-container {
             width: 100%;
             background: #111b29;
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 15px;
             text-align: center;
             border: 2px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
         .date-text {
-            font-size: 34px; /* Un peu plus petit et discret */
-            font-weight: 900;
+            font-size: 24px; 
+            font-weight: 700;
             color: #00ffcc;
             text-transform: capitalize;
         }
         .slate-container {
             width: 100%;
-            height: 580px; /* Ajusté pour laisser de la place */
+            height: 80%; 
             background: #1e1e1e; 
-            border: 18px solid #5c4033; /* Cadre bois légèrement plus fin */
-            border-radius: 14px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,1);
+            border: 15px solid #5c4033; 
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,1);
             padding: 10px;
             display: flex;
             justify-content: center;
@@ -132,13 +134,12 @@
             width: 100%;
             height: 100%;
             object-fit: contain; 
-            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <!-- GAUCHE -->
+    <!-- GAUCHE : HORLOGE -->
     <div class="left-side">
         <div class="analog-clock" id="clock-face">
             <div class="hand hour-hand" id="hour"></div>
@@ -147,7 +148,7 @@
         </div>
     </div>
 
-    <!-- DROITE -->
+    <!-- DROITE : DATE + ARDOISE -->
     <div class="right-side">
         <div class="date-container">
             <div class="date-text" id="date">Chargement...</div>
@@ -158,12 +159,12 @@
     </div>
 
     <script>
-        // Génération dynamique des 12 repères (adaptée à la nouvelle taille de 420px)
+        // Génération des 12 repères
         const clockFace = document.getElementById('clock-face');
         for (let i = 1; i <= 12; i++) {
             const marker = document.createElement('div');
             marker.className = 'hour-marker';
-            marker.style.transform = `rotate(${i * 30}deg) translateY(-172px)`;
+            marker.style.transform = `rotate(${i * 30}deg) translateY(-138px)`;
             clockFace.appendChild(marker);
         }
 
@@ -180,7 +181,7 @@
             const now = new Date();
             const dayOfWeek = now.getDay();
             
-            // 1. Horloge analogique
+            // 1. Aiguilles Horloge
             const seconds = now.getSeconds();
             const minutes = now.getMinutes();
             const hours = now.getHours();
@@ -193,7 +194,7 @@
             document.getElementById('minute').style.transform = `rotate(${minuteDegrees}deg)`;
             document.getElementById('hour').style.transform = `rotate(${hourDegrees}deg)`;
 
-            // 2. Date complète
+            // 2. Date
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('fr-FR', options);
             
