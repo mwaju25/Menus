@@ -16,41 +16,54 @@
         .left-side { justify-content: center; align-items: center; }
         .right-side { flex-direction: column; justify-content: space-between; }
 
-        /* --- HORLOGE ENGRENAGES NOIR & OR --- */
+        /* --- GRANDE HORLOGE INDUSTRIELLE (460px) --- */
         .analog-clock {
-            width: 380px; height: 380px; border: 8px solid #222; border-radius: 50%;
+            width: 460px; height: 460px; border: 10px solid #222; border-radius: 50%;
             position: relative; background: #111; overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
         }
-        .gear-container { position: absolute; width: 100%; height: 100%; opacity: 0.45; z-index: 1; }
-        .gear-main {
-            position: absolute; top: 50%; left: 50%; width: 130px; height: 130px; margin: -65px 0 0 -65px;
-            border: 6px dashed #d4af37; border-radius: 50%; animation: rot 50s linear infinite;
+        
+        /* Conteneur des engrenages réalistes */
+        .gear-container { position: absolute; width: 100%; height: 100%; opacity: 0.35; z-index: 1; }
+        
+        /* Dessin des engrenages à crans */
+        .gear {
+            position: absolute; border: 4px solid #d4af37; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
         }
-        .gear-second {
-            position: absolute; top: 36%; left: 36%; width: 80px; height: 80px;
-            border: 4px dashed #aa8416; border-radius: 50%; animation: rotRev 25s linear infinite;
+        .gear::before {
+            content: ''; position: absolute; width: 105%; height: 105%;
+            border: 6px dashed #d4af37; border-radius: 50%;
         }
+        
+        .gear-1 { width: 180px; height: 180px; top: 32%; left: 32%; animation: rot 40s linear infinite; }
+        .gear-2 { width: 110px; height: 110px; top: 22%; left: 20%; border-color: #aa8416; animation: rotRev 20s linear infinite; }
+        .gear-2::before { border-color: #aa8416; }
+        .gear-3 { width: 90px; height: 90px; top: 55%; left: 52%; border-color: #8a6808; animation: rotRev 15s linear infinite; }
+        .gear-3::before { border-color: #8a6808; }
+
         @keyframes rot { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes rotRev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 
         .clock-face-lines { position: absolute; width: 100%; height: 100%; z-index: 3; }
         .analog-clock::after {
-            content: ''; position: absolute; width: 14px; height: 14px; background: #d4af37;
+            content: ''; position: absolute; width: 16px; height: 16px; background: #d4af37;
             border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;
         }
         .clock-number {
-            position: absolute; font-family: 'Playfair Display', serif; font-size: 34px;
-            font-weight: 900; color: #d4af37; width: 40px; height: 40px; text-align: center; line-height: 40px;
+            position: absolute; font-family: 'Playfair Display', serif; font-size: 38px;
+            font-weight: 900; color: #d4af37; width: 50px; height: 50px; text-align: center; line-height: 50px;
         }
         .hour-marker {
-            position: absolute; width: 2px; height: 12px; background: rgba(255, 255, 255, 0.4);
-            left: 50%; margin-left: -1px; transform-origin: bottom center; bottom: 50%;
+            position: absolute; width: 3px; height: 14px; background: rgba(255, 255, 255, 0.4);
+            left: 50%; margin-left: -1.5px; transform-origin: bottom center; bottom: 50%;
         }
+        
+        /* Aiguilles adaptées à la taille 460px */
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; border-radius: 4px; }
-        .hour-hand { width: 8px; height: 90px; background: #fff; z-index: 5; margin-left: -4px; }
-        .minute-hand { width: 5px; height: 135px; background: #fff; z-index: 6; margin-left: -2.5px; }
-        .second-hand { width: 2px; height: 155px; background: #d4af37; z-index: 7; margin-left: -1px; }
+        .hour-hand { width: 10px; height: 110px; background: #fff; z-index: 5; margin-left: -5px; }
+        .minute-hand { width: 6px; height: 165px; background: #fff; z-index: 6; margin-left: -3px; }
+        .second-hand { width: 2px; height: 190px; background: #d4af37; z-index: 7; margin-left: -1px; }
 
         /* --- GRANDE DATE & ARDOISE --- */
         .date-container {
@@ -70,7 +83,12 @@
 
     <div class="left-side">
         <div class="analog-clock">
-            <div class="gear-container"><div class="gear-main"></div><div class="gear-second"></div></div>
+            <!-- Trois véritables engrenages mécaniques imbriqués -->
+            <div class="gear-container">
+                <div class="gear gear-1"></div>
+                <div class="gear gear-2"></div>
+                <div class="gear gear-3"></div>
+            </div>
             <div class="clock-face-lines" id="clock-face">
                 <div class="hand hour-hand" id="hour"></div>
                 <div class="hand minute-hand" id="minute"></div>
@@ -86,18 +104,20 @@
 
     <script>
         const clockFace = document.getElementById('clock-face');
+        const radius = 175; // Ajusté pour le grand cadran de 460px
+        
         for (let i = 1; i <= 12; i++) {
             const num = document.createElement('div');
             num.className = 'clock-number'; num.textContent = i;
             const angle = (i * 30 - 90) * (Math.PI / 180);
-            num.style.left = `${190 + 145 * Math.cos(angle) - 20}px`;
-            num.style.top = `${190 + 145 * Math.sin(angle) - 20}px`;
+            num.style.left = `${220 + radius * Math.cos(angle) - 25}px`; // 220 est le nouveau centre
+            num.style.top = `${220 + radius * Math.sin(angle) - 25}px`;
             clockFace.appendChild(num);
         }
         for (let i = 1; i <= 60; i++) {
             if (i % 5 !== 0) {
                 const m = document.createElement('div'); m.className = 'hour-marker';
-                m.style.transform = `rotate(${i * 6}deg) translateY(-172px)`; clockFace.appendChild(m);
+                m.style.transform = `rotate(${i * 6}deg) translateY(-210px)`; clockFace.appendChild(m);
             }
         }
 
