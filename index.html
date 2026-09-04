@@ -224,7 +224,7 @@ function drawClock(){
  x.restore();
 }
 function render(){
- const now=new Date(),season='festive',bg=document.getElementById('background');
+ const now=new Date(),season=seasonFor(now),bg=document.getElementById('background');
  if(bg.dataset.season!==season){bg.src=BG[season];bg.dataset.season=season;}
  renderDate(now);renderMenu(now);drawClock();
 }
