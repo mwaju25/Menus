@@ -78,9 +78,9 @@ body{font-family:Georgia,"Times New Roman",serif}
 const BG={
  spring:'fonds/spring.jpg',
  summer:'fonds/summer.jpg',
- autumn:'fonds/autumn.png',
+ autumn:'fonds/autumn.jpg',
  winter:'fonds/winter.jpg',
- festive:'fonds/festive.png'
+ festive:'fonds/festive.jpg'
 };
 const MENUS={
  '2026-09-03':{entree:'Potage',plat:['Roti de dinde','Potée de chou fleur'],dessert:'Dessert maison'},
@@ -243,9 +243,9 @@ function render(){
  const now=new Date(),season=seasonFor(now),bg=document.getElementById('background');
  if(bg.dataset.season!==season){const src=BG[season];
  const img=new Image();
- img.onload=()=>{bg.src=src+'?v=20260921';bg.dataset.season=season;};
+ img.onload=()=>{bg.src=src+'?v=20260923';bg.dataset.season=season;};
  img.onerror=()=>{bg.removeAttribute('src');bg.dataset.season='';};
- img.src=src+'?v=20260921';}
+ img.src=src+'?v=20260923';}
  renderDate(now);renderMenu(now);drawClock();
 }
 render();setInterval(render,100);addEventListener('resize',drawClock);
