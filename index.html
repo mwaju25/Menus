@@ -1,1 +1,254 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MENU DU JOUR - PRIMAIRE — V66 FÊTES + V46 HORLOGE CORRIGÉE</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
+body{font-family:Georgia,"Times New Roman",serif}
+#screen{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;background:#000}
+#background{position:absolute;left:-1.75%;top:-0.55%;width:103.5%;height:101.1%;object-fit:fill;z-index:0}
 
+
+
+/* HORLOGE : zone strictement calée sur le disque intérieur du cadran. */
+#clock{position:absolute;left:9.15%;top:22.55%;width:29.85%;height:54.20%;z-index:2;pointer-events:none}
+#clockCanvas{shape-rendering:geometricPrecision}
+#clockCanvas{display:block;width:100%;height:100%}
+
+#date{
+ position:absolute;left:51.0%;top:17.15%;width:38.0%;height:9.2%;z-index:3;
+ display:flex;align-items:center;justify-content:center;padding:0;
+ color:#f7f3e9;font-family:"Times New Roman",Times,serif;font-weight:400;
+ font-size:clamp(26px,2.35vw,46px);line-height:1;text-align:center;
+ text-transform:uppercase;text-shadow:0 2px 3px rgba(0,0,0,.95);white-space:nowrap;
+ letter-spacing:0;
+ transform:translateY(20%);
+}
+
+#menu{
+ position:absolute;left:45.15%;top:36.0%;width:45.4%;height:55.2%;z-index:3;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ text-align:center;color:#fff;font-family:Georgia,"Times New Roman",serif;
+ text-shadow:0 2px 4px #000;overflow:hidden;padding:0 1.2%;
+}
+.section-block{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;flex:1}
+.section-title{
+ color:#efbd54;
+ font-family:Georgia,"Times New Roman",serif;
+ font-weight:400;
+ font-size:clamp(27px,1.95vw,38px);
+ line-height:1;
+ white-space:nowrap;
+ text-transform:uppercase;
+ margin-bottom:.7vh;
+ width:100%;
+ display:grid;
+ grid-template-columns:1fr auto 1fr;
+ align-items:center;
+ justify-items:center;
+ text-align:center;
+}
+.section-title:before,.section-title:after{
+ content:"";
+ display:block;
+ width:72%;
+ height:1px;
+ margin:0;
+ background:linear-gradient(90deg,transparent,#d7a33e);
+}
+.section-title:after{background:linear-gradient(90deg,#d7a33e,transparent)}
+.item{font-family:Arial,Helvetica,sans-serif;font-weight:400;font-size:clamp(25px,1.82vw,35px);line-height:1.16;margin:.12vh 0;color:#fff;white-space:nowrap;transform:translateY(.65vh)}
+.item.small{font-size:.82em}
+.sep{position:relative;flex:0 0 3.0vh;width:64%;display:flex;align-items:center;justify-content:center;color:#e7b54f;font-size:clamp(11px,.9vw,17px);line-height:1}
+.sep:before,.sep:after{display:none !important}
+.empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#efbd54;font-family:Georgia,"Times New Roman",serif;font-size:clamp(18px,2vw,36px);font-weight:700}
+</style>
+</head>
+<body>
+<div id="screen">
+  <img id="background" data-season="" src="fonds/autumn.jpg" alt="">
+  <div id="clock"><canvas id="clockCanvas"></canvas></div>
+  <div id="date"></div>
+  <div id="menu"></div>
+</div>
+<script>
+const BG={
+ spring:'fonds/spring.jpg',
+ summer:'fonds/summer.jpg',
+ autumn:'fonds/autumn.jpg',
+ winter:'fonds/winter.jpg',
+ festive:'fonds/festive.jpg'
+};
+const MENUS={
+ '2026-09-03':{entree:'Potage',plat:['Roti de dinde','Potée de chou fleur'],dessert:'Dessert maison'},
+ '2026-09-04':{entree:'Potage',plat:['Pâtes','sauce bolognaise'],dessert:'Dessert du jour'},
+ '2026-09-07':{entree:'Potage',plat:['Pain de viande','Sauce tomate','Frites'],dessert:'Fruit de saison'},
+ '2026-09-08':{entree:'Potage',plat:['Pdt rissolées','Omelettes aux légumes','(végétarien)'],dessert:'Yaourt'},
+ '2026-09-09':{special:'Plat du jour'},
+ '2026-09-10':{entree:'Potage',plat:['Riz sauté au poulet'],dessert:'Dessert maison'},
+ '2026-09-11':{entree:'Potage',plat:['Pâtes au fromage et jambon'],dessert:'Dessert du jour'},
+ '2026-09-14':{entree:'Potage',plat:['Gyros de porc','Frites'],dessert:'Fruit de saison'},
+ '2026-09-15':{entree:'Potage',plat:['Gratin pdt brocoli','Escalope de poulet'],dessert:'Crème caramel'},
+ '2026-09-16':{special:'Plat du jour'},
+ '2026-09-17':{entree:'Potage',plat:['Hamburger maison','(végétarien)'],dessert:'Dessert maison'},
+ '2026-09-18':{entree:'Potage',plat:['Pâtes','Sauce tomate'],dessert:'Dessert du jour'},
+ '2026-09-21':{entree:'Potage',plat:['Vol-au-vent','Frites'],dessert:'Fruit de saison'},
+ '2026-09-22':{entree:'Potage',plat:['Pâtes carbonara'],dessert:'Yaourt'},
+ '2026-09-23':{special:'Plat du jour'},
+ '2026-09-24':{entree:'Potage',plat:['Roti porc','PDT, haricots verts','Sauce tomates'],dessert:'Dessert maison'},
+ '2026-09-25':{entree:'Potage',plat:['Pâtes au pesto vert','(végétarien)'],dessert:'Dessert du jour'},
+ '2026-09-28':{entree:'Potage',plat:['Roulades de boeuf','Champignons crème','Frites'],dessert:'Fruit de saison'},
+ '2026-09-29':{entree:'Potage',plat:['Pâtes aux scampis','Petits légumes'],dessert:'Crème caramel'},
+ '2026-09-30':{special:'Plat du jour'},
+ '2026-10-01':{entree:'Potage',plat:['Potée liégeoise','Lard'],dessert:'Dessert maison'},
+ '2026-10-02':{entree:'Potage',plat:['Pâtes au gratin','(végétarien)'],dessert:'Dessert du jour'}
+};
+const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const seasons2026={
+ spring:new Date('2026-03-20T15:46:00+01:00'),
+ summer:new Date('2026-06-21T10:25:00+02:00'),
+ autumn:new Date('2026-09-23T02:05:00+02:00'),
+ winter:new Date('2026-12-21T21:50:00+01:00')
+};
+function seasonFor(d){
+ const m=d.getMonth()+1,day=d.getDate();
+ if((m===12&&day>=15)||(m===1&&day<=5))return 'festive';
+ const y=d.getFullYear();
+ if(y===2026){if(d<seasons2026.spring)return 'winter';if(d<seasons2026.summer)return 'spring';if(d<seasons2026.autumn)return 'summer';if(d<seasons2026.winter)return 'autumn';return 'winter';}
+ const spring=new Date(y+'-03-20T00:00:00'),summer=new Date(y+'-06-21T00:00:00'),autumn=new Date(y+'-09-22T00:00:00'),winter=new Date(y+'-12-21T00:00:00');
+ if(d<spring)return 'winter';if(d<summer)return 'spring';if(d<autumn)return 'summer';if(d<winter)return 'autumn';return 'winter';
+}
+function keyOf(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function renderDate(d){document.getElementById('date').textContent=`${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`}
+function section(title,items){return `<div class="section-block"><div class="section-title">${title}</div>${items.map(x=>`<div class="item">${x}</div>`).join('')}</div>`}
+function renderMenu(d){
+ const box=document.getElementById('menu'),m=MENUS[keyOf(d)];
+ if(!m){box.innerHTML='<div class="empty">Menu non communiqué</div>';return}
+ if(m.special){box.innerHTML='<div class="empty">Plat du jour</div>';return}
+ let h='';
+ if(m.entree)h+=section('Entrée',[m.entree]);
+ if(m.plat)h+='<div class="sep">✦</div>'+section('Plat',m.plat);
+ if(m.dessert)h+='<div class="sep">✦</div>'+section('Dessert',[m.dessert]);
+ box.innerHTML=h;
+}
+function drawClock(){
+ const wrap=document.getElementById('clock'),c=document.getElementById('clockCanvas');
+ const r=wrap.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ c.width=Math.round(r.width*dpr);c.height=Math.round(r.height*dpr);
+ const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
+ const w=r.width,h=r.height,cx=w/2,cy=h/2;
+ const rx=w*.500, ry=h*.500;
+ x.clearRect(0,0,w,h);
+ x.save();
+ x.translate(cx,cy);
+ x.scale(rx,ry);
+
+ /* =========================================================
+    CADRAN V36 — position et taille STRICTEMENT celles de V34.
+    Le disque dynamique couvre toute la zone intérieure et
+    recouvre les 4 repères du fond.
+    ========================================================= */
+ const face=x.createRadialGradient(-.18,-.20,.05,0,0,1.02);
+ face.addColorStop(0,'#2b2117');
+ face.addColorStop(.48,'#211810');
+ face.addColorStop(1,'#120d09');
+ x.beginPath();x.arc(0,0,1,0,Math.PI*2);x.fillStyle=face;x.fill();
+
+ /* Contour doré intégré au cadran, sans changer sa position. */
+ x.beginPath();x.arc(0,0,.988,0,Math.PI*2);
+ x.strokeStyle='#c9922e';x.lineWidth=.028;x.stroke();
+ x.beginPath();x.arc(0,0,.958,0,Math.PI*2);
+ x.strokeStyle='rgba(247,202,96,.72)';x.lineWidth=.009;x.stroke();
+
+ /* Graduations fines, identiques dans leur logique à la référence. */
+ for(let i=0;i<60;i++){
+   const a=i*Math.PI/30-Math.PI/2;
+   const major=i%5===0;
+   const r1=.925, r2=major?.845:.895;
+   x.beginPath();
+   x.moveTo(Math.cos(a)*r1,Math.sin(a)*r1);
+   x.lineTo(Math.cos(a)*r2,Math.sin(a)*r2);
+   x.strokeStyle=major?'#f6f3ea':'rgba(245,242,235,.72)';
+   x.lineWidth=major?.014:.0055;
+   x.lineCap='butt';x.stroke();
+ }
+
+ /* Chiffres : Times New Roman, blanc, gras, placement circulaire de la référence. */
+ x.textAlign='center';x.textBaseline='middle';x.fillStyle='#f7f4ec';
+ x.font='700 .108px "Times New Roman",Times,serif';
+ for(let n=1;n<=12;n++){
+   const a=n*Math.PI/6-Math.PI/2,rr=.765;
+   x.fillText(String(n),Math.cos(a)*rr,Math.sin(a)*rr);
+ }
+
+ const now=new Date();
+
+ /* HEURE RÉELLE — Belgique / Europe-Brussels.
+    On lit séparément heure, minute et seconde dans le fuseau belge.
+    Les angles sont ensuite calculés selon une vraie horloge analogique :
+      - seconde : 6° par seconde
+      - minute : 6° par minute + fraction de seconde
+      - heure   : 30° par heure + fraction de minute
+    Aucun élément graphique du V46 n'est modifié. */
+ const parts=new Intl.DateTimeFormat('en-GB',{
+   timeZone:'Europe/Brussels',
+   hour12:false,
+   hour:'2-digit',
+   minute:'2-digit',
+   second:'2-digit'
+ }).formatToParts(now);
+
+ const t={};
+ for(const p of parts) if(p.type!=='literal') t[p.type]=Number(p.value);
+
+ const sec=t.second+now.getMilliseconds()/1000;
+ const min=t.minute+sec/60;
+ const hr=(t.hour%12)+min/60;
+
+ /* Aiguilles : proportions et silhouette proches de l'horloge fournie. */
+ function drawHand(angle,len,width,color,tail=0.055){
+   const a=angle*Math.PI/6-Math.PI/2;
+   const ux=Math.cos(a),uy=Math.sin(a),vx=-uy,vy=ux;
+   const tipX=ux*len,tipY=uy*len;
+   const backX=-ux*tail,backY=-uy*tail;
+   const half=width/2;
+   x.beginPath();
+   x.moveTo(backX+vx*half,backY+vy*half);
+   x.lineTo(tipX+vx*half*.55,tipY+vy*half*.55);
+   x.lineTo(tipX,tipY);
+   x.lineTo(tipX-vx*half*.55,tipY-vy*half*.55);
+   x.lineTo(backX-vx*half,backY-vy*half);
+   x.closePath();
+   x.fillStyle=color;x.shadowColor='rgba(0,0,0,.72)';x.shadowBlur=.018;x.fill();
+   x.shadowBlur=0;
+ }
+ drawHand(hr,.47,.055,'#e5b247',.075);       // heure
+ drawHand(min/5,.73,.035,'#f0c45a',.065);    // minute : 6° par minute
+
+ /* Seconde : fine, longue, avec petit contrepoids. */
+ const a=sec*Math.PI/30-Math.PI/2,ux=Math.cos(a),uy=Math.sin(a);
+ x.beginPath();x.moveTo(-ux*.13,-uy*.13);x.lineTo(ux*.86,uy*.86);
+ x.strokeStyle='#d3a23b';x.lineWidth=.009;x.lineCap='round';x.stroke();
+
+ /* Axe central doré. */
+ x.beginPath();x.arc(0,0,.060,0,Math.PI*2);x.fillStyle='#dca63d';x.fill();
+ x.beginPath();x.arc(0,0,.024,0,Math.PI*2);x.fillStyle='#fff0c6';x.fill();
+ x.restore();
+}
+function render(){
+ const now=new Date(),season=seasonFor(now),bg=document.getElementById('background');
+ if(bg.dataset.season!==season){
+ const src=BG[season];
+ bg.src=src;
+ bg.dataset.season=season;
+}
+ renderDate(now);renderMenu(now);drawClock();
+}
+render();setInterval(render,100);addEventListener('resize',drawClock);
+</script>
+</body>
+</html>
