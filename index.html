@@ -105,16 +105,16 @@ const MENUS={
  '2026-09-30':{special:'Plat du jour'},
  '2026-10-01':{entree:'Potage',plat:['Potée liégeoise','Lard'],dessert:'Dessert maison'},
  '2026-10-02':{entree:'Potage',plat:['Pâtes au gratin','(végétarien)'],dessert:'Dessert du jour'},
- '2026-10-05':{entree:'Potage',plat:['Blanquette de volaille','Frites'],dessert:'Fruit de saison'},
- '2026-10-06':{entree:'Potage',plat:['Chili de patates douces','Carottes, haricots verts','(végétarien)'],dessert:'Yaourt'},
- '2026-10-07':{special:'Plat du jour'},
- '2026-10-08':{entree:'Potage',plat:['Roti de porc','Gratin pdt','Choux de Bruxelles'],dessert:'Dessert maison'},
- '2026-10-09':{entree:'Potage',plat:['Pâtes arabiata'],dessert:'Dessert'},
- '2026-10-12':{entree:'Potage',plat:['Saucisse','Choux-rouge, pomme','Frites'],dessert:'Fruit de saison'},
- '2026-10-13':{entree:'Potage sanguinolent',plat:['Pâtes au pesto rouge'],dessert:'Donut Halloween'},
- '2026-10-14':{special:'Plat du jour'},
- '2026-10-15':{entree:'Potage',plat:['Roti de dinde','Potée de chou fleur'],dessert:'Dessert maison'},
- '2026-10-16':{entree:'Potage',plat:['Pâtes','sauce bolognaise'],dessert:'Dessert du jour'}
+ '2026-11-02':{special:'Congé'},
+ '2026-11-03':{entree:'Potage',plat:['Steak haché','Sauce provençale','Frites'],dessert:'Fruit de saison'},
+ '2026-11-04':{special:'Plat du jour'},
+ '2026-11-05':{entree:'Potage',plat:['Couscous de légumes','(végétarien)'],dessert:'Dessert maison'},
+ '2026-11-06':{entree:'Potage',plat:['Pâtes jambon crème'],dessert:'Dessert du jour'},
+ '2026-11-09':{entree:'Potage',plat:['Vol-au-vent','Frites'],dessert:'Fruit de saison'},
+ '2026-11-10':{entree:'Potage',plat:['Gratin dauphinois','Rôti de porc et salsifis'],dessert:'Yaourt'},
+ '2026-11-11':{special:'Congé'},
+ '2026-11-12':{entree:'Potage',plat:['Riz sauté au poulet'],dessert:'Dessert maison'},
+ '2026-11-13':{entree:'Potage',plat:['Pâtes tomate napolitaine','(végétarien)'],dessert:'Dessert du jour'}
 };
 const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
 const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
@@ -138,7 +138,7 @@ function section(title,items){return `<div class="section-block"><div class="sec
 function renderMenu(d){
  const box=document.getElementById('menu'),m=MENUS[keyOf(d)];
  if(!m){box.innerHTML='<div class="empty">Menu non communiqué</div>';return}
- if(m.special){box.innerHTML='<div class="empty">Plat du jour</div>';return}
+ if(m.special){box.innerHTML='<div class="empty">'+m.special+'</div>';return}
  let h='';
  if(m.entree)h+=section('Entrée',[m.entree]);
  if(m.plat)h+='<div class="sep">✦</div>'+section('Plat',m.plat);
