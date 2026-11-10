@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MENU DU JOUR - PRIMAIRE — V66 FÊTES + V46 HORLOGE CORRIGÉE</title>
+<title>MENU DU JOUR - PRIMAIRE — MENUS NOVEMBRE 2026</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
@@ -114,7 +114,17 @@ const MENUS={
  '2026-11-10':{entree:'Potage',plat:['Gratin dauphinois','Rôti de porc et salsifis'],dessert:'Yaourt'},
  '2026-11-11':{special:'Congé'},
  '2026-11-12':{entree:'Potage',plat:['Riz sauté au poulet'],dessert:'Dessert maison'},
- '2026-11-13':{entree:'Potage',plat:['Pâtes tomate napolitaine','(végétarien)'],dessert:'Dessert du jour'}
+ '2026-11-13':{entree:'Potage',plat:['Pâtes tomate napolitaine','(végétarien)'],dessert:'Dessert du jour'},
+ '2026-11-16':{entree:'Potage',plat:['Gyros de porc','Poivrons','Frites'],dessert:'Fruits de saison'},
+ '2026-11-17':{entree:'Potage',plat:['Riz cantonais','(végétarien)'],laitier:'Produits laitiers'},
+ '2026-11-18':{special:'Plat du jour'},
+ '2026-11-19':{entree:'Potage',plat:['Pdt grenailles romarin','Rôti de dinde','Légumes de saison'],dessert:'Dessert maison'},
+ '2026-11-20':{entree:'Potage',plat:['Spaghettis bolognaise'],dessert:'Chocolat Viennois'},
+ '2026-11-23':{entree:'Potage',plat:['Carbonnade de boeuf','Petits pois, carottes','Frites'],dessert:'Fruit de saison'},
+ '2026-11-24':{entree:'Potage',plat:['Quiche aux poireaux','(végétarien)'],laitier:'Produits laitiers'},
+ '2026-11-25':{special:'Plat du jour'},
+ '2026-11-26':{entree:'Potage',plat:['Hachis parmentier','aux épinards'],dessert:'Dessert maison'},
+ '2026-11-27':{entree:'Potage',plat:['Pâtes sauce Aurore'],dessert:'Biscuits du jour'},
 };
 const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
 const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
@@ -143,6 +153,7 @@ function renderMenu(d){
  if(m.entree)h+=section('Entrée',[m.entree]);
  if(m.plat)h+='<div class="sep">✦</div>'+section('Plat',m.plat);
  if(m.dessert)h+='<div class="sep">✦</div>'+section('Dessert',[m.dessert]);
+ if(m.laitier)h+='<div class="sep">✦</div>'+section('Produits laitiers',[m.laitier]);
  box.innerHTML=h;
 }
 function drawClock(){
